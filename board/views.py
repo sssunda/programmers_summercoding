@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from .models import Post
 from .forms import PostForm
+
 
 # Create your views here.
 def post_list(request):
@@ -99,6 +101,20 @@ def rank_chg_aft_complete():
         post.rank= cnt
         cnt+=1
         post.save()
+
+def post_list_rank_update(request):
+    orderlist=request.POST.get('orderlist')
+    orderlist=orderlist.split(",")
+    
+    posts = Post.objects.exclude(complete_chk = True).order_by('rank')
+    
+    for post in posts:
+        form = PostForm(instance = post)
+        post = form.save(commit=False)
+        post.rank= orderlist.pop(0)
+        post.save()
+
+    return HttpResponse("OK")
 
     
 
