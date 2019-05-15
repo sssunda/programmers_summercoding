@@ -1,0 +1,79 @@
+<html>
+
+<head>
+    <title>TODO</title>
+</head>
+
+<body>
+    <!-- header -->
+    <div class="page-header" style="width :100% ;border-bottom:1px solid black; padding:20px;">
+        <h1>TODO LIST</a></h1>
+    </div>
+    <div class="context">
+        <div id='button'>
+            <button>우선 순위 변경</button>
+            <button onclick="location.href='{% url 'board:post_add' %}'">추가</button>
+        </div>
+        <div id="todo-list">
+            <table>
+                <!-- list -->
+                <tr>
+                    <td style="width: 120px">우선 순위</td>
+                    <td style="width: 130px">제목</td>
+                    <td style="width: 130px">내용</td>
+                    <td style="width: 120px">마감 기한</td>
+                    <td style="width: 120px">완료</td>
+                </tr>
+                <ul>
+                    <!-- 완료되지 않은 list -->
+                    {% for post in post_list %}
+                    <li style="list-style:none">
+                        <tr>
+                            <td>
+                                {{post.rank |floatformat:"0"}}
+                            </td>
+                            <td><a href="{% url 'board:post_detail' post.id %}">{{post.title}}</a></td>
+                            <td>{{post.text}}</td>
+                            <td>
+                                {% if post.due_chk %}
+                                {{post.due_date|date:'Y-m-d'}}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'board:complete' post.id 'board:post_list' %}"
+                                    onclick="return confirm('완료 처리하시겠습니까?')">확인</a>
+                            </td>
+                        </tr>
+                    </li>
+                    {% endfor %}
+                    <!-- 완료된 list -->
+                    {% for post in post_list_end %}
+                    <li style="list-style:none">
+                        <tr>
+                            <td>
+                                -
+                            </td>
+                            <td><a href="{% url 'board:post_detail' post.id %}">{{post.title}}</a></td>
+                            <td>{{post.text}}</td>
+                            <td>
+                                {% if post.due_chk %}
+                                {{post.due_date|date:'Y-m-d'}}
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                            <td>
+                                O
+                            </td>
+                        </tr>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

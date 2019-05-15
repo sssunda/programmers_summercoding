@@ -1,0 +1,38 @@
+<html>
+
+<head>
+    <title>TODO</title>
+</head>
+
+<body>
+    <!-- header -->
+    <div class="page-header" style="width :100% ;border-bottom:1px solid black; padding:20px;">
+        <h1>TODO LIST</a></h1>
+    </div>
+    <div class="context">
+        <button onclick="location.href='{% url 'board:post_list' %}'">뒤로</button>
+        <button onclick="location.href='{% url 'board:post_edit' pk=post.pk %}'">수정</button>
+        <a href="{% url 'board:post_delete' post.id %}" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
+        <a href="{% url 'board:complete' post.id 'board:post_detail' %}" onclick="return confirm('완료 처리하시겠습니까?')">진행</a>
+        <table>
+            <tr>
+                <td style="width:100px">제목</td>
+                <td>{{post.title}}</td>
+            </tr>
+            <tr>
+                <td>내용</td>
+                <td>{{post.text}}</td>
+            </tr>
+            <tr>
+                <td>마감 기한</td>
+                <td>{{post.due_date|date:'Y-m-d'}}</td>
+            </tr>
+            <tr>
+                <td>완료 여부</td>
+                <td>{{post.complete_chk}}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>

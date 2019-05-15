@@ -1,0 +1,45 @@
+<html>
+
+<head>
+    <title>TODO</title>
+</head>
+
+<body>
+    <!-- header -->
+    <div class="page-header" style="width :100% ;border-bottom:1px solid black; padding:20px;">
+        <h1>TODO LIST</a></h1>
+    </div>
+    <div class="context">
+        <button onclick="location.href='{% url 'board:post_list' %}'">취소</button>
+        <form method="POST" class="post-form">{% csrf_token %}
+            <table>
+                <tr>
+                    <td>제목 : </td>
+                    <td>{{form.title}}</td>
+                </tr>
+                <tr>
+                    <td>내용 : </td>
+                    <td>{{form.text}}</td>
+                </tr>
+            
+                <tr>
+                    <td>마감기한 : </td>
+                    <td><a>{{form.due_chk}}</a><a>{{form.due_date}}</a></td>
+                </tr>
+                {% if form.title.value %}
+                <tr>
+                    <td>완료 여부 : </td>
+                    <td>{{form.complete_chk}}</td>
+                </tr>
+                {% else %}
+                    <p hidden>{{form.complete_chk}}</p>
+                {% endif %}
+                
+                 
+            </table>
+
+            <button type="submit" class="save btn btn-default">Save</button>
+        </form>
+    </div>
+
+</html>
