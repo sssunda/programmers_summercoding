@@ -111,7 +111,7 @@ def post_list_rank_update(request):
     for post in posts:
         form = PostForm(instance = post)
         post = form.save(commit=False)
-        post.rank= orderlist.pop(0)
+        post.rank= str(orderlist.index(post.rank)+1)
         post.save()
 
     return HttpResponse("OK")

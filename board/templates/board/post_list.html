@@ -61,21 +61,22 @@
             padding: 0.4em;            
             height: 18px;
         }
+
+        #fixed li{
+            background-color:lightgrey;
+        }
     </style>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>
-        
-        $(function () {
-            $("#sortable").sortable();
-            $("#sortable").disableSelection();
-        });
-        $(document).ready(function () {
-            $("#send").click(function () {
-                rank_change();
-            });
-        });
+        function sort(){
+            $(function () {
+                $("#sortable").sortable();
+                $("#sortable").disableSelection();
+            }); 
+        }
+
         function rank_change() {
             // 배열 생성
             var orderlist = $("#sortable").sortable("toArray");
@@ -92,7 +93,6 @@
                 async: false,
                 cache: false,
                 success: function (data) {
-
                     if (data == "OK") {
                         alert("변경 내용이 저장되었습니다.");
                         window.location.reload(true); //현재화면 새로고침
@@ -104,7 +104,24 @@
 
 
             })
-        }
+        } 
+        
+        $(document).ready(function () {
+            $("#rank_btn").click(function () {
+                if ($("#rank_btn").val()=="우선 순위 변경"){
+                    sort()
+                    $("#rank_btn").val('저장')
+                    $("#post_add_btn").hide()
+                    $("p").show()
+                }
+                else{
+                    rank_change()
+                    $("#rank_btn").val('우선 순위 변경')
+                    $("#post_add_btn").show()
+                    $("p").hide()
+                }
+            });
+        });
 
     </script>
 </head>
@@ -116,9 +133,13 @@
     </div>
     <div class="context">
         <div id='button'>
-            <button id="send">우선 순위 변경</button>
-            <button onclick="location.href='{% url 'board:post_add' %}'">추가</button>
+            <input type="button" id="rank_btn" value="우선 순위 변경">
+            <input type="button" id="post_add_btn" value="추가" onclick="location.href='{% url 'board:post_add' %}'">
         </div>
+        <p style="display:none">[우선 순위 변경]
+            <br>리스트를 드래그 하여 우선 순위를 변경하여 주십시오.
+            <br>변경 후에는 저장버튼을 눌러주십시오.
+        </p>
         <div id="todo_list">
             <ul id='list_header'>
                 <!-- list -->
