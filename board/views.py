@@ -84,6 +84,7 @@ def complete(request, id, url):
     post = form.save(commit=False)
     post.complete_chk = True
     post.rank ='end'
+    
     # DB저장
     post.save()
 

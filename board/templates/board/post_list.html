@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <html>
 
 <head>
@@ -27,6 +28,30 @@
             height: 18px;
         } */
 
+        .nav-counter {
+            position: absolute;
+            top: -1px;
+            right: 1px;
+            min-width: 8px;
+            height: 20px;
+            line-height: 20px;
+            margin-top: -11px;
+            padding: 0 6px;
+            font-weight: normal;
+            font-size: small;
+            color: white;
+            text-align: center;
+            text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+            background: #e23442;
+            border: 1px solid #911f28;
+            border-radius: 11px;
+            background-image: -webkit-linear-gradient(top, #e8616c, #dd202f);
+            background-image: -moz-linear-gradient(top, #e8616c, #dd202f);
+            background-image: -o-linear-gradient(top, #e8616c, #dd202f);
+            background-image: linear-gradient(to bottom, #e8616c, #dd202f);
+            -webkit-box-shadow: inset 0 0 1px 1px rgba(255, 255, 255, 0.1), 0 1px rgba(0, 0, 0, 0.12);
+            box-shadow: inset 0 0 1px 1px rgba(255, 255, 255, 0.1), 0 1px rgba(0, 0, 0, 0.12);
+        }
 
         #todo_list span {
             display: inline-block;
@@ -50,12 +75,128 @@
 
         #todo_list {
             width: 70%;
-            float:left;
+            float: left;
         }
 
         #todo_help {
             width: 30%;
-            float:left;
+            float: left;
+
+
+            a {
+                text-decoration: none;
+            }
+
+            .item-list:hover {
+                background-color: rgba(93, 93, 93, 0.6);
+
+            }
+
+            .item-list {
+                color: #3d3d3d;
+                position: relative;
+                cursor: pointer;
+                display: block;
+                overflow: hidden;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+                -webkit-tap-highlight-color: transparent;
+                vertical-align: middle;
+                z-index: 1;
+                transition: .3s ease-out;
+
+            }
+
+            .modal-window {
+                position: fixed;
+                background-color: rgba(1, 1, 1, 0.15);
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                z-index: 999;
+                opacity: 0;
+                pointer-events: none;
+                -webkit-transition: all 0.3s;
+                -moz-transition: all 0.3s;
+                transition: all 0.3s;
+            }
+
+            .modal-window:target {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .modal-window>div {
+                width: 400px;
+                position: relative;
+                margin: 10% auto;
+                padding: 2rem;
+                background: #f3f3f3;
+                color: #444;
+            }
+
+            .modal-window header {
+                font-weight: bold;
+            }
+
+            .modal-close {
+                color: #aaa;
+                line-height: 50px;
+                font-size: 80%;
+                position: absolute;
+                right: 0;
+                text-align: center;
+                top: 0;
+                width: 70px;
+                text-decoration: none;
+            }
+
+            .modal-close:hover {
+                color: #000;
+            }
+
+            .modal-window h1 {
+                font-size: 150%;
+                margin: 0 0 15px;
+            }
+
+            .btn,
+            .btn-large,
+            .btn-flat {
+                border: none;
+                border-radius: 2px;
+                display: inline-block;
+                height: 36px;
+                line-height: 36px;
+                padding: 0 2rem;
+                text-transform: uppercase;
+                vertical-align: middle;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .btn,
+            .btn-large {
+                text-decoration: none;
+                color: #fff;
+                background-color: #26a69a;
+                text-align: center;
+                letter-spacing: .5px;
+                transition: .2s ease-out;
+                cursor: pointer;
+            }
+
+            .btn,
+            .btn-large,
+            .btn-floating,
+            .btn-large,
+            .btn-flat {
+                font-size: 1rem;
+                outline: 0;
+            }
+
         }
     </style>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -99,6 +240,7 @@
         }
 
         $(document).ready(function () {
+
             $("#rank_btn").click(function () {
                 if ($("#rank_btn").val() == "우선 순위 변경") {
                     sort()
@@ -116,6 +258,7 @@
                 }
             });
         });
+
 
         function complete_btn(id) {
             var url = "{% url 'board:complete' 'id' 'board:post_list' %}".replace("id", id)
@@ -189,13 +332,11 @@
         </div>
         <div id="todo_help">
             <div id="todo_help_header">
-                마감기한 지난 TODO
-                {% for post in post_list_false %}
-                <li>
-                    <span><a href="{% url 'board:post_detail' post.id %}">{{post.title}}</a></span>
-                    <span>{{post.due_date|date:'Y-m-d'}}</span>
-                </li>
-                {% endfor %}
+                <a href="#" class="button" style="width:50px; position:relative;"><img
+                        src="{% static "img/alarm.png" %}" widht="50" height="50"><span
+                        class="nav-counter">{{post_list_false.count}}</span></a>
+            </div>
+            
             </div>
 
         </div>
