@@ -2,6 +2,54 @@
 
 <head>
     <title>TODO</title>
+    <style>
+        #table {
+            display: table;
+            width: 100%;
+        }
+
+        .row {
+            display: table-row;
+        }
+
+        .cell {
+            display: table-cell;
+            padding: 3px;
+            /* border-bottom: 1px solid #DDD; */
+        }
+
+        .col1 {
+            width: 10%;
+        }
+
+        .col2 {
+            width: 40%;
+        }
+
+        #compelete_btn{
+            visibility: hidden;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        function back_btn() {
+            location.href="{% url 'board:post_list' %}"
+        }
+        function edit_btn() {
+            location.href = "{% url 'board:post_edit' pk=post.pk %}"
+        }
+        function delete_btn() {
+            if (confirm('정말 삭제하시겠습니까?')) {
+                location.href = "{% url 'board:post_delete' post.id %}"
+            }
+        }
+        function complete_btn() {
+            if (confirm('완료 처리하시겠습니까?')) {
+                location.href = "{% url 'board:complete' post.id 'board:post_detail' %}"
+            }
+        }
+    </script>
 </head>
 
 <body>
@@ -10,28 +58,41 @@
         <h1>TODO LIST</a></h1>
     </div>
     <div class="context">
-        <button onclick="location.href='{% url 'board:post_list' %}'">뒤로</button>
-        <button onclick="location.href='{% url 'board:post_edit' pk=post.pk %}'">수정</button>
-        <a href="{% url 'board:post_delete' post.id %}" onclick="return confirm('정말 삭제하시겠습니까?')">삭제</a>
-        <a href="{% url 'board:complete' post.id 'board:post_detail' %}" onclick="return confirm('완료 처리하시겠습니까?')">진행</a>
-        <table>
-            <tr>
-                <td style="width:100px">제목</td>
-                <td>{{post.title}}</td>
-            </tr>
-            <tr>
-                <td>내용</td>
-                <td>{{post.text}}</td>
-            </tr>
-            <tr>
-                <td>마감 기한</td>
-                <td>{{post.due_date|date:'Y-m-d'}}</td>
-            </tr>
-            <tr>
-                <td>완료 여부</td>
-                <td>{{post.complete_chk}}</td>
-            </tr>
-        </table>
+        <div id="btn">
+            <input type="button" id="back_btn" onclick=back_btn() value="뒤로" />
+            <input type="button" id="edit_btn" onclick=edit_btn() value="수정" />
+            <input type="button" id="delete_btn" onclick=delete_btn() value="삭제" />
+        </div>
+        <div id="table">
+            <div class="row">
+                <span class="cell col1">제목</span><span class="cell col2">{{post.title}}</span>
+            </div>
+            <div class="row">
+                <span class="cell col1">내용</span><span class="cell col2">{{post.text}}</span>
+            </div>
+            <div class="row">
+                <span class="cell col1">마감 기한</span>
+                <span class="cell col2">
+                    {% if post.due_chk %}
+                        {{post.due_date|date:'Y-m-d'}}
+                    {% else %}
+                        -
+                    {% endif %}
+                </span>
+            </div>
+            <div class="row">
+                <span class="cell col1">완료 여부</span>
+                <span id="complete_col" class="cell col2">
+                    <!-- 완료하지 못했을 경우, 버튼 보여준다. -->
+                    {% if post.complete_chk %} 
+                        완료 
+                    {% else %} 
+                        <input type="button" id="complete_btn" onclick=complete_btn() value="완료체크" /> 
+                    {% endif %}
+                    </span>
+            </div>
+
+        </div>
     </div>
 </body>
 
