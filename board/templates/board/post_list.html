@@ -6,29 +6,7 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <style>
-        /* #sortable li span {
-            position: absolute; 
-            margin-left: -1.3em;
-            display: inline-block;
-            width:150px;
-        } */
-
-        /* #fixed {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            width: 60%;
-        } */
-
-        /* #fixed li {
-            margin: 0 3px 3px 3px;
-            padding: 0.4em;
-            padding-left: 1.5em;
-            font-size: 1.4em;
-            height: 18px;
-        } */
-
-        .nav-counter {
+        #nav_counter {
             position: absolute;
             top: -1px;
             right: 1px;
@@ -74,129 +52,66 @@
         }
 
         #todo_list {
-            width: 70%;
+            width: 60%;
             float: left;
         }
 
         #todo_help {
             width: 30%;
             float: left;
+        }
 
+        /* The Modal (background) */
+        #modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
 
-            a {
-                text-decoration: none;
-            }
+        /* Modal Content/Box */
+        #modal_content {
+            background-color: #fefefe;
+            margin-left: 60%;
+            margin-top: 12%;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 20%;
+            /* Could be more or less, depending on screen size */
+            height: 300px;
+            overflow: auto;
+        }
 
-            .item-list:hover {
-                background-color: rgba(93, 93, 93, 0.6);
+        #table {
+            display: table;
+            width: 100%;
+        }
 
-            }
+        .row {
+            display: table-row;
+        }
 
-            .item-list {
-                color: #3d3d3d;
-                position: relative;
-                cursor: pointer;
-                display: block;
-                overflow: hidden;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-                -webkit-tap-highlight-color: transparent;
-                vertical-align: middle;
-                z-index: 1;
-                transition: .3s ease-out;
+        .cell {
+            display: table-cell;
+            padding: 3px;
+            /* border-bottom: 1px solid #DDD; */
+        }
 
-            }
+        .col1 {
+            width: 30%;
+        }
 
-            .modal-window {
-                position: fixed;
-                background-color: rgba(1, 1, 1, 0.15);
-                top: 0;
-                right: 0;
-                bottom: 0;
-                left: 0;
-                z-index: 999;
-                opacity: 0;
-                pointer-events: none;
-                -webkit-transition: all 0.3s;
-                -moz-transition: all 0.3s;
-                transition: all 0.3s;
-            }
-
-            .modal-window:target {
-                opacity: 1;
-                pointer-events: auto;
-            }
-
-            .modal-window>div {
-                width: 400px;
-                position: relative;
-                margin: 10% auto;
-                padding: 2rem;
-                background: #f3f3f3;
-                color: #444;
-            }
-
-            .modal-window header {
-                font-weight: bold;
-            }
-
-            .modal-close {
-                color: #aaa;
-                line-height: 50px;
-                font-size: 80%;
-                position: absolute;
-                right: 0;
-                text-align: center;
-                top: 0;
-                width: 70px;
-                text-decoration: none;
-            }
-
-            .modal-close:hover {
-                color: #000;
-            }
-
-            .modal-window h1 {
-                font-size: 150%;
-                margin: 0 0 15px;
-            }
-
-            .btn,
-            .btn-large,
-            .btn-flat {
-                border: none;
-                border-radius: 2px;
-                display: inline-block;
-                height: 36px;
-                line-height: 36px;
-                padding: 0 2rem;
-                text-transform: uppercase;
-                vertical-align: middle;
-                -webkit-tap-highlight-color: transparent;
-            }
-
-            .btn,
-            .btn-large {
-                text-decoration: none;
-                color: #fff;
-                background-color: #26a69a;
-                text-align: center;
-                letter-spacing: .5px;
-                transition: .2s ease-out;
-                cursor: pointer;
-            }
-
-            .btn,
-            .btn-large,
-            .btn-floating,
-            .btn-large,
-            .btn-flat {
-                font-size: 1rem;
-                outline: 0;
-            }
-
+        .col2 {
+            width: 20%;
         }
     </style>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
@@ -216,7 +131,7 @@
 
             // 배열을 POST 로 넘김
             $.ajax({
-                url: "{% url 'board:post_list_rank_update' %}",
+                url: "{% url 'board:update_post_list_rank' %}",
                 type: "POST",
                 data: {
                     "orderlist": orderlist.toString(),
@@ -259,7 +174,6 @@
             });
         });
 
-
         function complete_btn(id) {
             var url = "{% url 'board:complete' 'id' 'board:post_list' %}".replace("id", id)
             if (confirm('완료 처리하시겠습니까?')) {
@@ -268,8 +182,15 @@
         }
 
         function post_add_btn() {
-            location.href = "{% url 'board:post_add' %}"
+            location.href = "{% url 'board:add_post' %}"
         }
+        function open_pop() {
+            $('#modal').show();
+        }
+        function close_pop() {
+            $('#modal').hide();
+        };
+
     </script>
 </head>
 
@@ -332,14 +253,35 @@
         </div>
         <div id="todo_help">
             <div id="todo_help_header">
-                <a href="#" class="button" style="width:50px; position:relative;"><img
-                        src="{% static "img/alarm.png" %}" widht="50" height="50"><span
-                        class="nav-counter">{{post_list_false.count}}</span></a>
+                <a onclick=open_pop() style="width:50px; position:relative;"><img src="{% static "img/alarm.png" %}"
+                        widht="50" height="50">
+                    {% if post_list_false.count %}
+                    <span id="nav_counter">{{post_list_false.count}}</span></a>
+                {% endif %}
             </div>
-            
+            <div id="modal">
+                <div id="modal_content">
+                    <a style="float:right;" onclick=close_pop()>close</a>
+                    [마감 기한이 지난 항목]
+                    <div id="table">
+
+                        <div class="row">
+                            <span class="cell col1">제목</span><span class="cell col2">마감 기한</span>
+                        </div>
+
+                        {% for post in post_list_false %}
+                        <div class="row">
+                            <span class="cell col1">{{post.title}}</span><span
+                                class="cell col2">{{post.due_date|date:'Y-m-d'}}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
 
         </div>
+
+    </div>
     </div>
 </body>
 

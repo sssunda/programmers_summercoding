@@ -40,15 +40,7 @@
             $("#id_due_chk").click(function () {
                 due_date_chk()
             });
-
-            $("#id_due_date").bind("change", function () {
-                if (is_valid_dateformat()) {
-                    is_valid_date()
-                }
-                else {
-                    alert("날짜 형식을 맞춰주세요. YYYY-MM-DD")
-                }
-            })
+            
         })
 
         // 마감기한 체크 하면, 입력할 수 있도록 변경
@@ -59,50 +51,6 @@
                 $("#id_due_date").val('')
                 $("#id_due_date").attr('disabled', true)
             }
-        }
-
-        // 날짜 변환
-        function format_date(date) {
-            var d = new Date(date);
-            var month = '' + (d.getMonth() + 1);
-            var day = '' + d.getDate();
-            var year = d.getFullYear();
-
-            if (month.length < 2) month = '0' + month;
-            if (day.length < 2) day = '0' + day;
-
-            return [year, month, day].join('-');
-        }
-
-        // 날짜 체크 (수기 입력시 필요)
-        function is_valid_dateformat() {
-            var due_date_input = $("#id_due_date").val()
-            var regEx = /^\d{4}-\d{2}-\d{2}$/;
-            if (!due_date_input.match(regEx)) return false;
-            var d = new Date(due_date_input);
-            var dNum = d.getTime();
-            if (!dNum && dNum !== 0) return false;
-            return d.toISOString().slice(0, 10) === due_date_input;
-        }
-
-        // 현재 날짜와 비교
-        function is_valid_date() {
-            var due_date_input = $("#id_due_date").val().split('-');
-            var due_date = new Date(due_date_input[0], due_date_input[1] - 1, due_date_input[2]);
-
-            // 시간 00 맞추기 위해서 포맷팅한다.
-            due_date = format_date(due_date);
-            var today = format_date(new Date());
-            
-            if (due_date < today) {
-                alert('마감 기한은 오늘부터 가능합니다.')
-                $("#id_due_date").val('')
-                $("#id_due_date").focus()
-                return false;
-            } else {
-                return true;
-            }
-
         }
 
         // 저장버튼 눌렀을 때, 체크
@@ -116,7 +64,14 @@
 
         // 뒤로가기 버튼
         function cancel_btn() {
-            history.go(-1)
+            var param = document.location.href.split("/");
+
+            if(param[3]=="new"){
+                location.href="{% url 'board:post_list' %}"
+            }else{
+                var url ="{% url 'board:post_detail' 'id' %}".replace('id', param[3])
+                location.href=url
+            }
         }
 
         // datepicker
@@ -142,12 +97,16 @@
                 <div class="row">
                     <span class="cell col1">내용</span><span class="cell col2">{{form.text}}</span>
                 </div>
-                {% if form.title.value == None %}
+                {{ form.non_field_errors }}
                 <div class="row">
                     <span class="cell col1">마감 기한</span><span class="cell col2">{{form.due_chk}}{{form.due_date}}</span>
                 </div>
+                
+                {% if form.title.value != None %}
+                <div class="row">
+                    <span class="cell col1">완료 여부</span><span class="cell col2">{{form.complete_chk}}</span>
+                </div>
                 {% endif %}
-
             </div>
             <input type="submit" id="save_btn" onclick="return is_valid_save()" value="저장" />
 

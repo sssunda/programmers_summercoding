@@ -37,11 +37,11 @@
             location.href="{% url 'board:post_list' %}"
         }
         function edit_btn() {
-            location.href = "{% url 'board:post_edit' pk=post.pk %}"
+            location.href = "{% url 'board:edit_post' pk=post.pk %}"
         }
         function delete_btn() {
             if (confirm('정말 삭제하시겠습니까?')) {
-                location.href = "{% url 'board:post_delete' post.id %}"
+                location.href = "{% url 'board:delete_post' post.id %}"
             }
         }
         function complete_btn() {
