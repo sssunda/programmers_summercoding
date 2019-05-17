@@ -47,13 +47,18 @@ def add_post(request):
 
     total = len(Post.objects.all())
     end = len(Post.objects.filter(rank='end'))
-    
+    cnt=0
+    if end ==0 :
+        cnt = total+1
+    else :
+        cnt=total-end-1
+
     form = PostForm()
     if request.method=="POST":
         form=PostForm(request.POST)
         if form.is_valid():
             post=form.save(commit=False)
-            post.rank = str(total - end-1)
+            post.rank = str(cnt)
 
             # DB 저장    
             post.save()
