@@ -32,40 +32,40 @@
 {% block content %}
 <!-- 사용되는 버튼들 -->
 <div class="btn_group">
-    <input type="button" id="home_btn" class="btn" onclick=home_btn() value="목록" />
-    <input type="button" id="edit_btn" class="btn" onclick=edit_btn() value="수정" />
-    <input type="button" id="delete_btn" class="btn" onclick=delete_btn() value="삭제" />
-</div>
-<!-- 선택된 todo 항목 상세 내용 -->
-<div class="todo">
-    <div id="todo_table">
-        <div class="todo_row">
-            <span class="todo_cell col1">제목</span><span class="todo_cell col2">{{post.title}}</span>
-        </div>
-        <div class="todo_row">
-            <span class="todo_cell col1">내용</span><span id="todo_content" class="todo_cell col2">{{post.text}}</span>
-        </div>
-        <div class="todo_row">
-            <span class="todo_cell col1">마감 기한</span>
-            <span class="todo_cell col2">
-                {% if post.due_chk %}
-                {{post.due_date|date:'Y-m-d'}}
-                {% else %}
-                -
-                {% endif %}
-            </span>
-        </div>
-        <div class="todo_row">
-            <span class="todo_cell col1">완료 여부</span>
-            <span id="complete_col" class="todo_cell col2">
-                <!-- 완료하지 못했을 경우, 버튼 보여준다. -->
-                {% if post.complete_chk %}
-                완료
-                {% else %}
-                <input type="button" id="complete_btn" class="btn btn-success" onclick=complete_btn() value="완료 체크" />
-                {% endif %}
-            </span>
+        <input type="button" id="home_btn" class="btn" onclick=home_btn() value="목록" />
+        <input type="button" id="edit_btn" class="btn" onclick=edit_btn() value="수정" />
+        <input type="button" id="delete_btn" class="btn btn-danger" onclick=delete_btn() value="삭제" />
+    </div>
+    <!-- 선택된 todo 항목 상세 내용 -->
+    <div class="todo">
+        <div id="todo_table">
+            <div class="todo_row">
+                <span class="todo_cell col1">제목</span><span class="todo_cell col2">{{post.title}}</span>
+            </div>
+            <div class="todo_row">
+                <span class="todo_cell col1">내용</span><span id="todo_content" class="todo_cell col2">{{post.text}}</span>
+            </div>
+            <div class="todo_row">
+                <span class="todo_cell col1">마감 기한</span>
+                <span class="todo_cell col2">
+                    {% if post.due_chk %}
+                    {{post.due_date|date:'Y-m-d'}}
+                    {% else %}
+                    -
+                    {% endif %}
+                </span>
+            </div>
+            <div class="todo_row">
+                <span class="todo_cell col1">완료 여부</span>
+                <span id="complete_col" class="todo_cell col2">
+                    <!-- 완료하지 못했을 경우, 버튼 보여준다. -->
+                    {% if post.complete_chk %}
+                    완료
+                    {% else %}
+                    <input type="button" id="complete_btn" class="btn btn-success" onclick=complete_btn() value="완료 체크" />
+                    {% endif %}
+                </span>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}

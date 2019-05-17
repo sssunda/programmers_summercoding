@@ -22,13 +22,14 @@
     {% endblock %}
 
     <script>
-        // 마감기한 지난 알림 노출할 때 보이는 Modal open, close
+        // 마감기한 지난 알림 노출할 때 보이는 Modal
         function open_pop() {
             $('#modal').show();
         }
         function close_pop() {
             $('#modal').hide();
         };
+        
     </script>
 </head>
 
@@ -53,6 +54,8 @@
         <div id="context_list">
             {% block content %}
             {% endblock %}
+
+
             <!-- modal -->
             <div id="modal">
                 <div id="modal_content">

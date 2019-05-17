@@ -153,12 +153,16 @@ span {
     /* Could be more or less, depending on screen size */
     height: 300px;
     overflow: auto;
+    
 }
 
 #modal_header {
     height: 45px;
 }
 
+#modal_header a{
+    font-size: 1.4em;
+}
 #modal_cancel_btn{
     float: right;
 }
@@ -172,7 +176,7 @@ span {
 
 .modal_row_header {
     border-bottom: 1px solid lightgray;
-
+    
 }
 
 .modal_col1 {
@@ -186,10 +190,12 @@ span {
     margin: 0px;
 }
 
+
+
 /* post_detail */
 .todo{
     height:100%;
-    margin-top:30px;
+    
 }
 #todo_table {
     width: 97%;
@@ -228,9 +234,6 @@ span {
 #todo_content{
     white-space:pre;
     overflow: auto;  
-    height:30%;
     padding-top:0px;
-    vertical-align: middle;
+    /* vertical-align: middle; */
 }
-
-

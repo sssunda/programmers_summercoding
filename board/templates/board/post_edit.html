@@ -57,33 +57,35 @@
 {% block content %}
 <!-- form 항목 -->
 <div class="todo">
-<form method="POST" class="post-form">{% csrf_token %}
-    <div id="todo_table">
-        <div class="todo_row">
+    <form method="POST" class="post-form">{% csrf_token %}
+        <div class="btn_group">
+            <input type="button" id="cancel_btn" class="btn" value="취소" />
+            <input type="submit" id="save_btn" class="btn btn-danger" onclick="return is_valid_save()" value="저장" />
+        </div>
+        <div id="todo_table">
+            <div class="todo_row">
                 <span class="todo_cell col1">제목</span><span class="todo_cell col2">{{form.title}}</span>
-        </div>
-        <div class="todo_row">
-                <span id="todo_content" class="todo_cell col1">내용</span><span id="todo_content" class="todo_cell col2">{{form.text}}</span>
-        </div>
-        <!-- 유효성 체크 후, 에러발생시 메세지 보여줌 -->
-        {{ form.non_field_errors }}
-        <div class="todo_row">
+            </div>
+            <div class="todo_row">
+                <span id="todo_content" class="todo_cell col1">내용</span><span id="todo_content"
+                    class="todo_cell col2">{{form.text}}</span>
+            </div>
+            <!-- 유효성 체크 후, 에러발생시 메세지 보여줌 -->
+            {{ form.non_field_errors }}
+            <div class="todo_row">
                 <span class="todo_cell col1">마감 기한</span>
                 <span class="todo_cell col2">{{form.due_chk}}{{form.due_date}}</span>
-        </div>
-        <!-- 항목 추가시에는 완료 여부 보이지 않도록 한다. -->
-        {% if form.title.value != None %}
-        <div class="todo_row">
+            </div>
+            <!-- 항목 추가시에는 완료 여부 보이지 않도록 한다. -->
+            {% if form.title.value != None %}
+            <div class="todo_row">
                 <span class="todo_cell col1">완료 여부</span>
                 <span class="todo_cell col2">{{form.complete_chk}}</span>
+            </div>
+            {% endif %}
         </div>
-        {% endif %}
-    </div>
 
-    <div class="btn_group">
-    <input type="button" id="cancel_btn" class="btn" value="취소" />
-    <input type="submit" id="save_btn" class="btn" onclick="return is_valid_save()" value="저장" />
-    </div>
-</form>
-</div>  
+
+    </form>
+</div>
 {% endblock %}
