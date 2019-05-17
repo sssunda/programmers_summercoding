@@ -23,15 +23,14 @@
 
     <script>
         $(document).ready(function () {
-            close_pop()
+            $("#open_pop").click(function(){
+                $("#modal").toggle();
+            });
+            $("#modal_cancel_btn").click(function(){
+                $("#modal").toggle();
+            })
+            
         });
-        // 마감기한 지난 알림 노출할 때 보이는 Modal
-        function open_pop() {
-            $('#modal').show();
-        }
-        function close_pop() {
-            $('#modal').hide();
-        };
         
     </script>
 </head>
@@ -44,11 +43,12 @@
         </div>
         <div id="alarm">
             <!-- 마감기한 지난 항목 알림 노출 -->
-            <a onclick=open_pop() style="width:50px; position:relative;">
+            <a id ="open_pop"style="width:50px; position:relative;">
                 <img src="{% static "img/alarm.png" %}" widht="50" height="50">
                 {% if post_list_false.count %}
-                <span id="alarm_counter">{{post_list_false.count}}</span></a>
-            {% endif %}
+                <span id="alarm_counter">{{post_list_false.count}}</span>
+                {% endif %}
+            </a>
         </div>
     </div>
 
@@ -57,8 +57,6 @@
         <div id="context_list">
             {% block content %}
             {% endblock %}
-
-
             <!-- modal -->
             <div id="modal">
                 <div id="modal_content">

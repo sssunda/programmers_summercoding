@@ -45,13 +45,10 @@ def add_post(request):
     dt = datetime.datetime.now().strftime("%Y-%m-%d")
     post_list_false=Post.objects.filter(complete_chk=False, due_date__lt=dt).order_by('due_date')
 
-    total = len(Post.objects.all())
-    end = len(Post.objects.filter(rank='end'))
-    cnt=0
-    if end ==0 :
-        cnt = total+1
-    else :
-        cnt=total-end-1
+    
+    cnt = len(Post.objects.exclude(rank='end'))+1
+    
+    
 
     form = PostForm()
     if request.method=="POST":
