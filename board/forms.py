@@ -15,7 +15,8 @@ class PostForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data =super().clean()
-        value = str(cleaned_data.get("due_date"))
-        if not re.match(r'\d{4}-\d{2}-\d{2}', value):
-            raise ValidationError("날짜형식을 맞춰주세요. YYYY-MM-DD")
+        if cleaned_data.get("due_chk"):    
+            value = str(cleaned_data.get("due_date"))
+            if not re.match(r'\d{4}-\d{2}-\d{2}', value):
+                raise ValidationError("날짜형식을 맞춰주세요. YYYY-MM-DD")
         return cleaned_data

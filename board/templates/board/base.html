@@ -1,203 +1,79 @@
+{% load staticfiles %}
 <html>
 
 <head>
     <title>TODO</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!-- static에 있는 css -->
+    <link rel="stylesheet" href="{% static 'css/board.css' %}">
 
-    <style>
-        /* #sortable li span {
-            position: absolute; 
-            margin-left: -1.3em;
-            display: inline-block;
-            width:150px;
-        } */
-
-        /* #fixed {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            width: 60%;
-        } */
-
-        /* #fixed li {
-            margin: 0 3px 3px 3px;
-            padding: 0.4em;
-            padding-left: 1.5em;
-            font-size: 1.4em;
-            height: 18px;
-        } */
-
-
-        #todo_list span {
-            display: inline-block;
-            width: 150px;
-        }
-
-        #todo_list li {
-            list-style: none;
-            margin: 0 3px 3px 3px;
-            padding: 0.4em;
-            height: 18px;
-        }
-
-        #fixed li {
-            background-color: lightgrey;
-        }
-
-        ul {
-            padding: 0px;
-        }
-
-        #todo_list {
-            width: 70%;
-            float:left;
-        }
-
-        #todo_help {
-            width: 30%;
-            float:left;
-        }
-    </style>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+    <!-- Datepicker 사용할 때, 필요함! -->
+    <!-- Fengyuan Chen's Datepicker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css"
+        integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js"
+        integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
+
+    {% block script %}
+    {% endblock %}
 
     <script>
-        function sort() {
-            $(function () {
-                $("#sortable").sortable();
-                $("#sortable").disableSelection();
-            });
+        // 마감기한 지난 알림 노출할 때 보이는 Modal open, close
+        function open_pop() {
+            $('#modal').show();
         }
-
-        function rank_change() {
-            // 배열 생성
-            var orderlist = $("#sortable").sortable("toArray");
-
-            // 배열을 POST 로 넘김
-            $.ajax({
-                url: "{% url 'board:post_list_rank_update' %}",
-                type: "POST",
-                data: {
-                    "orderlist": orderlist.toString(),
-                    "csrfmiddlewaretoken": "{{csrf_token}}",
-                },
-
-                async: false,
-                cache: false,
-                success: function (data) {
-                    if (data == "OK") {
-                        alert("변경 내용이 저장되었습니다.");
-                        window.location.reload(true); //현재화면 새로고침
-                    }
-                },
-                error: function (request, status, error) {
-                    alert("orderlist:" + orderlist + "\n" + "code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-                }
-
-
-            })
-        }
-
-        $(document).ready(function () {
-            $("#rank_btn").click(function () {
-                if ($("#rank_btn").val() == "우선 순위 변경") {
-                    sort()
-                    $("#rank_btn").val('저장')
-                    $("#post_add_btn").hide()
-                    $("p").show()
-                    $(".complete_btn").attr('disabled', true)
-                }
-                else {
-                    rank_change()
-                    $("#rank_btn").val('우선 순위 변경')
-                    $("#post_add_btn").show()
-                    $("p").hide()
-                    $(".complete_btn").attr('disabled', false)
-                }
-            });
-        });
-
-        function complete_btn(id) {
-            var url = "{% url 'board:complete' 'id' 'board:post_list' %}".replace("id", id)
-            if (confirm('완료 처리하시겠습니까?')) {
-                location.href = url
-            }
-        }
-
-        function post_add_btn() {
-            location.href = "{% url 'board:post_add' %}"
-        }
+        function close_pop() {
+            $('#modal').hide();
+        };
     </script>
 </head>
 
 <body>
     <!-- header -->
-    <div class="page-header" style="width :100% ;border-bottom:1px solid black; padding:20px;">
-        <h1>TODO LIST</a></h1>
+    <div class="page_header">
+        <div id="header">
+            <a href="{% url 'board:post_list' %}">TODO LIST</a>
+        </div>
+        <div id="alarm">
+            <!-- 마감기한 지난 항목 알림 노출 -->
+            <a onclick=open_pop() style="width:50px; position:relative;">
+                <img src="{% static "img/alarm.png" %}" widht="50" height="50">
+                {% if post_list_false.count %}
+                <span id="alarm_counter">{{post_list_false.count}}</span></a>
+            {% endif %}
+        </div>
     </div>
+
+    <!-- context -->
     <div class="context">
-        <div id='btn'>
-            <input type="button" id="rank_btn" value="우선 순위 변경" />
-            <input type="button" id="post_add_btn" onclick=post_add_btn() value="추가" />
-
-        </div>
-        <p style="display:none">[우선 순위 변경]
-            <br>리스트를 드래그 하여 우선 순위를 변경하여 주십시오.
-            <br>변경 후에는 저장버튼을 눌러주십시오.
-        </p>
-        <div id="todo_list">
-            <ul id='todo_list_header'>
-                <!-- list -->
-                <li><span>우선순위</span><span>제목</span><span>마감기한</span><span>완료</span></li>
-            </ul>
-            <!-- 완료되지 않은 list -->
-            <ul id="sortable">
-                {% for post in post_list %}
-                <li id={{forloop.counter}}>
-                    <span>{{post.rank |floatformat:"0"}}</span>
-                    <span><a href="{% url 'board:post_detail' post.id %}">{{post.title}}</a></span>
-                    <span>
-                        {% if post.due_chk %}
-                        {{post.due_date|date:'Y-m-d'}}
-                        {% else %}
-                        -
-                        {% endif %}
-                    </span>
-                    <span>
-                        <input type="button" class="complete_btn" onclick=complete_btn("{{post.id}}") value="확인" />
-                    </span>
-                </li>
-                {% endfor %}
-            </ul>
-            <ul id="fixed">
-                <!-- 완료된 list -->
-                {% for post in post_list_complete %}
-                <li>
-                    <span>-</span>
-                    <span><a href="{% url 'board:post_detail' post.id %}">{{post.title}}</a></span>
-                    <span>
-                        {% if post.due_chk %}
-                        {{post.due_date|date:'Y-m-d'}}
-                        {% else %}
-                        -
-                        {% endif %}
-                    </span>
-                    <span>O</span>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div id="todo_help">
-            <div id="todo_help_header">
-                마감기한 지난 TODO
-                {% for post in post_list_false %}
-                <li>
-                    <span><a href="{% url 'board:post_detail' post.id %}">{{post.title}}</a></span>
-                    <span>{{post.due_date|date:'Y-m-d'}}</span>
-                </li>
-                {% endfor %}
+        <div id="context_list">
+            {% block content %}
+            {% endblock %}
+            <!-- modal -->
+            <div id="modal">
+                <div id="modal_content">
+                    <div id="modal_header">
+                        <a>[마감 기한이 지난 항목]</a>
+                        <input type="button" class="btn" id="modal_cancel_btn" onclick=close_pop() value="x">
+                    </div>
+                    <div id="modal_table">
+                        <div class="modal_row_header">
+                            <span class="modal_col1">제목</span><span class="modal_col2">마감 기한</span>
+                        </div>
+                        {% for post in post_list_false %}
+                        <div class="modal_row">
+                            <li><span class="modal_col1">{{post.title}}</span>
+                                <span class="modal_col2">{{post.due_date|date:'Y-m-d'}}</span>
+                            </li>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
-
         </div>
     </div>
 </body>

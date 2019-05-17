@@ -1,116 +1,82 @@
-<html>
+{% extends 'board/base.html' %}
+{% load staticfiles %}
 
-<head>
-    <title>TODO</title>
-    <style>
-        #table {
-            display: table;
-            width: 100%;
-        }
+{% block script %}
+<script>
+    $(document).ready(function () {
+        due_date_chk()
 
-        .row {
-            display: table-row;
-        }
-
-        .cell {
-            display: table-cell;
-            padding: 3px;
-            /* border-bottom: 1px solid #DDD; */
-        }
-
-        .col1 {
-            width: 10%;
-        }
-
-        .col2 {
-            width: 40%;
-        }
-    </style>
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <!-- Fengyuan Chen's Datepicker -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css"
-        integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js"
-        integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
-    <script>
-        $(document).ready(function () {
+        $("#id_due_chk").click(function () {
             due_date_chk()
-
-            $("#id_due_chk").click(function () {
-                due_date_chk()
-            });
-            
-        })
-
-        // 마감기한 체크 하면, 입력할 수 있도록 변경
-        function due_date_chk() {
-            if ($("#id_due_chk").is(":checked")) {
-                $("#id_due_date").attr('disabled', false)
-            } else {
-                $("#id_due_date").val('')
-                $("#id_due_date").attr('disabled', true)
-            }
-        }
-
-        // 저장버튼 눌렀을 때, 체크
-        function is_valid_save() {
-            if ($("#id_due_chk").is(":checked") && $("#id_due_date").val() == "") {
-                alert('마감 기한을 입력해주십시오.')
-                return false;
-            }
-            return true;
-        }
-
-        // 뒤로가기 버튼
-        function cancel_btn() {
-            var param = document.location.href.split("/");
-
-            if(param[3]=="new"){
-                location.href="{% url 'board:post_list' %}"
-            }else{
-                var url ="{% url 'board:post_detail' 'id' %}".replace('id', param[3])
-                location.href=url
-            }
-        }
-
-        // datepicker
-        $(function () {
-            $("#id_due_date").datepicker({ format: 'yyyy-mm-dd' });
         });
 
-    </script>
-</head>
+        $("#cancel_btn").click(function () {
+            cancel_btn()
+        })
 
-<body>
-    <!-- header -->
-    <div class="page-header" style="width :100% ;border-bottom:1px solid black; padding:20px;">
-        <h1>TODO LIST</a></h1>
+    })
+
+    // 마감기한 체크 하면, 입력할 수 있도록 변경
+    function due_date_chk() {
+        if ($("#id_due_chk").is(":checked")) {
+            $("#id_due_date").attr('disabled', false)
+        } else {
+            $("#id_due_date").val('')
+            $("#id_due_date").attr('disabled', true)
+        }
+    }
+
+    // 저장버튼 눌렀을 때, 체크
+    function is_valid_save() {
+        if ($("#id_due_chk").is(":checked") && $("#id_due_date").val() == "") {
+            alert('마감 기한을 입력해주십시오.')
+            return false;
+        }
+        return true;
+    }
+
+    // 뒤로가기 버튼
+    function cancel_btn() {
+        var param = document.location.href.split("/");
+
+        if (param[3] == "new") {
+            location.href = "{% url 'board:post_list' %}"
+        } else {
+            var url = "{% url 'board:post_detail' 'id' %}".replace('id', param[3])
+            location.href = url
+        }
+    }
+
+    // datepicker
+    $(function () {
+        $("#id_due_date").datepicker({ format: 'yyyy-mm-dd' });
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- form 항목 -->
+<form method="POST" class="post-form">{% csrf_token %}
+    <div id="table">
+        <div class="row">
+            <span class="cell col1">제목</span><span class="cell col2">{{form.title}}</span>
+        </div>
+        <div class="row">
+            <span class="cell col1">내용</span><span class="cell col2">{{form.text}}</span>
+        </div>
+        <!-- 유효성 체크 후, 에러발생시 메세지 보여줌 -->
+        {{ form.non_field_errors }}
+        <div class="row">
+            <span class="cell col1">마감 기한</span><span class="cell col2">{{form.due_chk}}{{form.due_date}}</span>
+        </div>
+        <!-- 항목 추가시에는 완료 여부 보이지 않도록 한다. -->
+        {% if form.title.value != None %}
+        <div class="row">
+            <span class="cell col1">완료 여부</span><span class="cell col2">{{form.complete_chk}}</span>
+        </div>
+        {% endif %}
     </div>
-    <div class="context">
-        <input type="button" id="cancel_btn" onclick=cancel_btn() value="취소" />
-        <form method="POST" class="post-form">{% csrf_token %}
-            <div id="table">
-                <div class="row">
-                    <span class="cell col1">제목</span><span class="cell col2">{{form.title}}</span>
-                </div>
-                <div class="row">
-                    <span class="cell col1">내용</span><span class="cell col2">{{form.text}}</span>
-                </div>
-                {{ form.non_field_errors }}
-                <div class="row">
-                    <span class="cell col1">마감 기한</span><span class="cell col2">{{form.due_chk}}{{form.due_date}}</span>
-                </div>
-                
-                {% if form.title.value != None %}
-                <div class="row">
-                    <span class="cell col1">완료 여부</span><span class="cell col2">{{form.complete_chk}}</span>
-                </div>
-                {% endif %}
-            </div>
-            <input type="submit" id="save_btn" onclick="return is_valid_save()" value="저장" />
-
-        </form>
-    </div>
-
-</html>
+    <input type="button" id="cancel_btn" class="btn" value="취소" />
+    <input type="submit" id="save_btn" class="btn" onclick="return is_valid_save()" value="저장" />
+</form>
+{% endblock %}
