@@ -19,7 +19,7 @@
             location.href = "{% url 'board:delete_post' post.id %}"
         }
     }
-    
+
     // 완료 체크 버튼 눌렀을 때,
     function complete_btn() {
         if (confirm('완료 처리하시겠습니까?')) {
@@ -37,33 +37,35 @@
     <input type="button" id="delete_btn" class="btn" onclick=delete_btn() value="삭제" />
 </div>
 <!-- 선택된 todo 항목 상세 내용 -->
-<div class="todo_table">
-    <div class="todo_row">
-        <span class="todo_cell col1">제목</span><span class="todo_cell col2">{{post.title}}</span>
-    </div>
-    <div class="todo_row">
-        <span class="todo_cell col1">내용</span><span class="todo_cell col2">{{post.text}}</span>
-    </div>
-    <div class="todo_row">
-        <span class="todo_cell col1">마감 기한</span>
-        <span class="todo_cell col2">
-            {% if post.due_chk %}
-            {{post.due_date|date:'Y-m-d'}}
-            {% else %}
-            -
-            {% endif %}
-        </span>
-    </div>
-    <div class="todo_row">
-        <span class="todo_cell col1">완료 여부</span>
-        <span id="complete_col" class="todo_cell col2">
-            <!-- 완료하지 못했을 경우, 버튼 보여준다. -->
-            {% if post.complete_chk %}
-            완료
-            {% else %}
-            <input type="button" id="complete_btn" class="btn btn-success" onclick=complete_btn() value="완료 체크" />
-            {% endif %}
-        </span>
+<div class="todo">
+    <div id="todo_table">
+        <div class="todo_row">
+            <span class="todo_cell col1">제목</span><span class="todo_cell col2">{{post.title}}</span>
+        </div>
+        <div class="todo_row">
+            <span class="todo_cell col1">내용</span><span id="todo_content" class="todo_cell col2">{{post.text}}</span>
+        </div>
+        <div class="todo_row">
+            <span class="todo_cell col1">마감 기한</span>
+            <span class="todo_cell col2">
+                {% if post.due_chk %}
+                {{post.due_date|date:'Y-m-d'}}
+                {% else %}
+                -
+                {% endif %}
+            </span>
+        </div>
+        <div class="todo_row">
+            <span class="todo_cell col1">완료 여부</span>
+            <span id="complete_col" class="todo_cell col2">
+                <!-- 완료하지 못했을 경우, 버튼 보여준다. -->
+                {% if post.complete_chk %}
+                완료
+                {% else %}
+                <input type="button" id="complete_btn" class="btn btn-success" onclick=complete_btn() value="완료 체크" />
+                {% endif %}
+            </span>
+        </div>
     </div>
 </div>
 {% endblock %}
