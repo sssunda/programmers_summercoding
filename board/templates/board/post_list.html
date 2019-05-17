@@ -3,26 +3,6 @@
 
 {% block script %}
 <script>
-    $("#rank_btn").click(function () {
-        if ($("#rank_btn").val() == "우선 순위 변경") {
-            sort()
-            $("#rank_btn").attr('class', 'btn btn-danger')
-            $("#rank_btn").val('저장')
-            $("#add_post_btn").hide()
-            $("#rank_help").show()
-            $(".btn-success").attr('disabled', true)
-        }
-        else {
-            rank_change()
-            $("#rank_btn").attr('class', 'btn')
-            $("#rank_btn").val('우선 순위 변경')
-            $("#add_post_btn").show()
-            $("#rank_help").hide()
-            $(".btn-success").attr('disabled', false)
-        }
-    });
-    
-
     // 우선 순위 리스트 움직일 수 있게끔 설정
     function sort() {
         $(function () {
@@ -59,6 +39,26 @@
         })
     }
 
+    // 우선 순위 변경 버튼 눌렀을 때,
+    function rank_btn(){
+        if ($("#rank_btn").val() == "우선 순위 변경") {
+            sort()
+            $("#rank_btn").attr('class', 'btn btn-danger')
+            $("#rank_btn").val('저장')
+            $("#add_post_btn").hide()
+            $("#rank_help").show()
+            $(".btn-success").attr('disabled', true)
+        }
+        else {
+            rank_change()
+            $("#rank_btn").attr('class', 'btn')
+            $("#rank_btn").val('우선 순위 변경')
+            $("#add_post_btn").show()
+            $("#rank_help").hide()
+            $(".btn-success").attr('disabled', false)
+        }
+    }
+
     // 항목 완료 체크버튼 눌렀을 때,
     function complete_btn(id) {
         var url = "{% url 'board:complete' 'id' 'board:post_list' %}".replace("id", id)
@@ -78,7 +78,7 @@
 
 <!-- 사용되는 버튼들 -->
 <div class="btn_group">
-    <input type="button" class="btn" id="rank_btn" value="우선 순위 변경" />
+    <input type="button" class="btn" id="rank_btn" onclick=rank_btn() value="우선 순위 변경" />
     <input type="button" class="btn" id="add_post_btn" onclick=add_post_btn() value="+" />
     <span id="rank_help" style="display:none">* 리스트를 드래그 하여 우선 순위를 변경하여 주십시오.</span>
 </div>
