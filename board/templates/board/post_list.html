@@ -1,7 +1,10 @@
 {% extends 'board/base.html' %}
-{% load staticfiles %}
+{% load static %}
 
 {% block script %}
+    <!-- static에 있는 css -->
+    <link rel="stylesheet" href="{% static 'css/post_list.css' %}">
+    
 <script>
     // 우선 순위 리스트 움직일 수 있게끔 설정
     function sort() {

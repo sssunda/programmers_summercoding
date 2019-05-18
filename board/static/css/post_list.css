@@ -1,0 +1,62 @@
+#todo_list {
+    width: 100%;
+    height: 80%;
+    overflow: auto;
+}
+
+li {
+    list-style: none;
+    padding: 5px;
+    margin: 5px;
+}
+
+ul {
+
+    margin-block-start: 0em;
+    margin-block-end: 0em;
+    padding-inline-start: 0px;
+}
+
+span {
+    display: inline-block;
+}
+
+.col_rank {
+    width: 10%;
+    text-align: center;
+}
+
+.col_title {
+    width: 48%;
+}
+
+.col_due_date {
+    width: 23%;
+    text-align: center;
+}
+
+.col_complete {
+    width: 17%;
+    text-align: center;
+}
+
+#todo_list_header {
+    height: 35px;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+#todo_list_header li {
+    border-bottom: 1px solid lightgrey;
+}
+
+#fixed li {
+    background-color: lightgrey;
+}
+
+.btn_group {
+    width: 100%;
+    height: 75px;
+    padding: 15px;
+
+}

@@ -2,6 +2,9 @@
 {% load staticfiles %}
 
 {% block script %}
+<!-- static에 있는 css -->
+<link rel="stylesheet" href="{% static 'css/post_detail.css' %}">
+
 <script>
     // 목록 버튼 눌렀을 때,
     function home_btn() {
@@ -30,42 +33,57 @@
 {% endblock %}
 
 {% block content %}
-<!-- 사용되는 버튼들 -->
-<div class="btn_group">
-        <input type="button" id="home_btn" class="btn" onclick=home_btn() value="목록" />
-        <input type="button" id="edit_btn" class="btn" onclick=edit_btn() value="수정" />
-        <input type="button" id="delete_btn" class="btn btn-danger" onclick=delete_btn() value="삭제" />
-    </div>
-    <!-- 선택된 todo 항목 상세 내용 -->
-    <div class="todo">
-        <div id="todo_table">
-            <div class="todo_row">
-                <span class="todo_cell col1">제목</span><span class="todo_cell col2">{{post.title}}</span>
-            </div>
-            <div class="todo_row">
-                <span class="todo_cell col1">내용</span><span id="todo_content" class="todo_cell col2">{{post.text}}</span>
-            </div>
-            <div class="todo_row">
-                <span class="todo_cell col1">마감 기한</span>
-                <span class="todo_cell col2">
-                    {% if post.due_chk %}
-                    {{post.due_date|date:'Y-m-d'}}
-                    {% else %}
-                    -
-                    {% endif %}
-                </span>
-            </div>
-            <div class="todo_row">
-                <span class="todo_cell col1">완료 여부</span>
-                <span id="complete_col" class="todo_cell col2">
-                    <!-- 완료하지 못했을 경우, 버튼 보여준다. -->
-                    {% if post.complete_chk %}
-                    완료
-                    {% else %}
-                    <input type="button" id="complete_btn" class="btn btn-success" onclick=complete_btn() value="완료 체크" />
-                    {% endif %}
-                </span>
-            </div>
+<div class="todo">
+    <div class="todo_header">
+        <div class="todo_title">{{post.title}}</div>
+        <!-- 사용되는 버튼들 -->
+        <div class="btn_group">
+            <button id="home_btn" class="mdc-icon-button material-icons" style="display:inline; font-size: 40px"
+                onclick=home_btn()>
+                format_list_bulleted</button>
+            
+            {% if post.complete_chk %}
+            <button class="mdc-icon-button material-icons" style="display:inline; font-size: 40px;" disabled>
+                check_circle_outline</button>
+            {% else %}
+            <button id="complete_btn" class="mdc-icon-button material-icons" style="display:inline; font-size: 40px;"
+                onclick=complete_btn()>
+                check_circle_outline</button>
+            {% endif %}
+            
+            <button id="edit_btn" class="mdc-icon-button material-icons" style="display:inline;font-size: 40px"
+                onclick=edit_btn()>
+                edit</button>
+
+            <button id="delete_btn" class="mdc-icon-button material-icons" style="display:inline;font-size: 40px"
+                onclick=delete_btn()>
+                delete_forever</button>
+
         </div>
     </div>
+
+    <!-- 선택된 todo 항목 상세 내용 -->
+    <div class="todo_body">
+        <div class="todo_col1">Due date</div>
+        <div class="todo_col2">
+            {% if post.due_chk %}
+            {{post.due_date|date:'Y-m-d'}}
+            {% else %}
+            -
+            {% endif %}
+        </div>
+        <div class="todo_col1">Status</div>
+        <div class="todo_col2">
+            {% if post.complete_chk %}
+            완료
+            {% else %}
+            진행중
+            {% endif %}
+        </div>
+
+
+    </div>
+    <div id="todo_content_title">Notes</div>
+    <div id="todo_content">{{post.text}}</div>
+</div>
 {% endblock %}

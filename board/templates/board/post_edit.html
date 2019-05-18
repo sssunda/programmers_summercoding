@@ -2,10 +2,18 @@
 {% load staticfiles %}
 
 {% block script %}
+<!-- static에 있는 css -->
+<link rel="stylesheet" href="{% static 'css/post_detail.css' %}">
 <script>
     $(document).ready(function () {
-        due_date_chk()
+        var param = document.location.href.split("/");
+        if (param[3] == "new") {
+            $("#todo_row_complete").hide();
+        } else {
+            $("#todo_row_complete").show();
+        }
 
+        due_date_chk()
         $("#id_due_chk").click(function () {
             due_date_chk()
         });
@@ -38,7 +46,6 @@
     // 뒤로가기 버튼
     function cancel_btn() {
         var param = document.location.href.split("/");
-
         if (param[3] == "new") {
             location.href = "{% url 'board:post_list' %}"
         } else {
@@ -63,26 +70,28 @@
             <input type="submit" id="save_btn" class="btn btn-danger" onclick="return is_valid_save()" value="저장" />
         </div>
         <div id="todo_table">
-            <div class="todo_row">
-                <span class="todo_cell col1">제목</span><span class="todo_cell col2">{{form.title}}</span>
-            </div>
-            <div class="todo_row">
-                <span id="todo_content" class="todo_cell col1">내용</span><span id="todo_content"
-                    class="todo_cell col2">{{form.text}}</span>
-            </div>
+
+            <div class="todo_cell col1">제목</div>
+            <div class="todo_cell col2">{{form.title}}</div>
+
+
+            <div id="todo_content" class="todo_cell col1">내용</div>
+            <div id="todo_content" class="todo_cell col2">{{form.text}}</div>
+
+
             <!-- 유효성 체크 후, 에러발생시 메세지 보여줌 -->
             {{ form.non_field_errors }}
-            <div class="todo_row">
-                <span class="todo_cell col1">마감 기한</span>
-                <span class="todo_cell col2">{{form.due_chk}}{{form.due_date}}</span>
-            </div>
+
+            <div class="todo_cell col1">마감 기한</div>
+            <div class="todo_cell col2">{{form.due_chk}}{{form.due_date}}</div>
+
             <!-- 항목 추가시에는 완료 여부 보이지 않도록 한다. -->
-            {% if form.title.value != None %}
-            <div class="todo_row">
-                <span class="todo_cell col1">완료 여부</span>
-                <span class="todo_cell col2">{{form.complete_chk}}</span>
+
+            <div id="todo_row_complete" class="todo_row" style="display: none">
+                <div class="todo_cell col1">완료 여부</div>
+                <div class="todo_cell col2">{{form.complete_chk}}</div>
             </div>
-            {% endif %}
+
         </div>
 
 

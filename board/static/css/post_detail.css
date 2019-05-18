@@ -1,0 +1,64 @@
+/* post_detail */
+
+.todo{
+    padding: 30px;
+}
+.todo_header{
+    height:80px;
+    
+}
+.todo_title{
+    display: inline-block;
+    width:60%;
+    height:80px;
+    font-size:60px;
+    border-left: 4px solid lightskyblue;
+    padding-left:20px;
+    font-family: 'Nanum Pen Script', cursive;
+}
+
+.btn_group{
+    display: inline-block;
+    width:30%;
+    height:80px;
+    text-align: right;
+    
+    float:right;
+}
+
+.todo_body{
+    height:100px;
+    padding-top:20px;
+    font-weight: bold;
+}
+
+.todo_col1{
+    display: inline-block;
+    height:50px;
+    width:15%;    
+    font-size:18px;
+    color:lightslategrey;
+}
+
+.todo_col2{
+    display: inline-block;
+    height:50px;
+    width:70%;
+    font-size:18px;   
+}
+
+#todo_content_title{
+    display: inline-block;    
+    width:15%;    
+    height:50px;
+    font-size:18px;
+    font-weight: bold;
+    color:lightslategrey;
+}
+
+#todo_content{
+    height:400px;
+    white-space:pre;
+    overflow: auto; 
+    border : 1px solid lightgray;
+}
