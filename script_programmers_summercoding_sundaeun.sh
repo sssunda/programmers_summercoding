@@ -1,11 +1,9 @@
 #!/bin/bash   
-cd /home/programmers_summercoding
-
 set 
 
 virtualenv --python=python3.6 myvenv
 
-source myvent/bin/activate
+source myvenv/bin/activate
 
 pip install django~=2.0
 
