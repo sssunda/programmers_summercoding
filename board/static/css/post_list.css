@@ -1,62 +1,98 @@
-#todo_list {
-    width: 100%;
-    height: 80%;
-    overflow: auto;
+ul{
+    margin:0;
+    padding-left:3%;
+    padding-right:3%;
 }
-
-li {
+li{
     list-style: none;
-    padding: 5px;
-    margin: 5px;
+}
+.btn_group{
+    display: inline-block;
+    width:100%;
+    height:50px;
+}
+.todo_list{
+    width:100%;
+    height:500px;
 }
 
-ul {
-
-    margin-block-start: 0em;
-    margin-block-end: 0em;
-    padding-inline-start: 0px;
+.todo_list_header{
+    width:94%;
+    height:50px;
+    margin-left:3%;
+    margin-right:3%;
+    padding-top:30px;
+    border-bottom: 1px solid lightgray;
 }
+.todo_list_header span{
+    text-align: center;
+    font-weight: bold;
+}
+.todo_list_body{
+    height:650px;
+    overflow:auto;
 
-span {
+}
+span{
+    height:50px;
+    font-size:20px;
     display: inline-block;
 }
-
-.col_rank {
-    width: 10%;
+.col_rank{
+    width:18%;
     text-align: center;
 }
 
-.col_title {
-    width: 48%;
+.col_title{
+    width:40%;
 }
-
-.col_due_date {
-    width: 23%;
+.col_due_date{
+    width:20%;
+    text-align: center;
+}
+.col_complete{
+    width:20%;
     text-align: center;
 }
 
-.col_complete {
-    width: 17%;
-    text-align: center;
+#add_post_btn{
+    margin-right:50px;
+    font-size:55px;
+    color:#ff1744;  
+    display:inline ;
+    float:right;
+    width:60px;
+    height:60px;
 }
 
-#todo_list_header {
-    height: 35px;
-    text-align: center;
-    margin-bottom: 0;
+#rank_btn{
+    color:#24292e;
+    font-size: 20px;
+    width:40px;
+    height:40px;
+    margin:0;
+    font-weight: bold;
+    background-color:#eceff1;
+    border-radius: 10px; 
+    box-shadow: inset 0 0 3px 3px rgba(255, 255, 255, 0.1), 0 3px rgba(0, 0, 0, 0.12);
 }
 
-#todo_list_header li {
-    border-bottom: 1px solid lightgrey;
+#rank_help{
+    display:none;
+    position: absolute;
+    top:220px;
+    left:580px;
+    font-size:20px;
+    color:cornflowerblue;
 }
 
-#fixed li {
-    background-color: lightgrey;
+.fixed li{
+    background-color: lightgray;
 }
 
-.btn_group {
-    width: 100%;
-    height: 75px;
-    padding: 15px;
-
+.col_complete button{
+    width: 40px;
+    height:40px;
+    padding-top:15px;
+    
 }

@@ -6,7 +6,7 @@ import datetime
 
 # Create your views here.
 def rank_chg_aft_complete():
-    posts = Post.objects.exclude(complete_chk = True).order_by('rank')
+    posts = Post.objects.exclude(complete_chk = True).extra({'rank': "CAST(rank as UNSIGNED)"}).order_by('rank')
     cnt = 1
     for post in posts:
         form = PostForm(instance = post)
@@ -17,7 +17,7 @@ def rank_chg_aft_complete():
 
 def post_list(request):
     # 완료되지 않은 리스트
-    post_list = Post.objects.filter(complete_chk=False).order_by('rank')
+    post_list = Post.objects.filter(complete_chk=False).extra({'rank': "CAST(rank as UNSIGNED)"}).order_by('rank')
     # 완료된 리스트
     post_list_complete=Post.objects.filter(complete_chk=True).order_by('updated_at')
     # 마감기한 지난 리스트
@@ -44,12 +44,7 @@ def add_post(request):
     # 마감기한 지난 리스트
     dt = datetime.datetime.now().strftime("%Y-%m-%d")
     post_list_false=Post.objects.filter(complete_chk=False, due_date__lt=dt).order_by('due_date')
-
-    
     cnt = len(Post.objects.exclude(rank='end'))+1
-    
-    
-
     form = PostForm()
     if request.method=="POST":
         form=PostForm(request.POST)
@@ -108,7 +103,7 @@ def update_post_list_rank(request):
     orderlist=request.POST.get('orderlist')
     orderlist=orderlist.split(",")
     
-    posts = Post.objects.exclude(complete_chk = True).order_by('rank')
+    posts = Post.objects.exclude(complete_chk = True)
     
     for post in posts:
         form = PostForm(instance = post)

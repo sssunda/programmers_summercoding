@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
     <!-- font -->
-    <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic|Nanum+Pen+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic|Nanum+Pen+Script|Permanent+Marker&display=swap" rel="stylesheet">
 
     {% block script %}
     {% endblock %}
@@ -47,21 +47,16 @@
     <!-- header -->
     <div class="page_header">
         <div id="header">
-            <a href="{% url 'board:post_list' %}">TODO LIST</a>
-            <a id="open_pop" style="width:50px; position:relative;">
-                <button class="mdc-icon-button material-icons" style="display:inline; color : white; font-size: 40px">
-                    notification_important</button>
-                <span id="alarm_counter">{{post_list_false.count}}</span>
-            </a>
-        </div>
-        <div id="alarm">
-            <!-- 마감기한 지난 항목 알림 노출 -->
-            <a id="open_pop" style="width:50px; position:relative;">
-                <img src="{% static "img/alarm.png" %}" widht="50" height="50">
-                {% if post_list_false.count %}
-                <span id="alarm_counter">{{post_list_false.count}}</span>
-                {% endif %}
-            </a>
+            <a id="header_title" href="{% url 'board:post_list' %}" style="color:white;text-decoration-line:none;">TODO LIST</a>
+                <a id="open_pop" style="width:50px; position:relative;">
+                    <button class="mdc-icon-button material-icons" title="Alarm about due date over"
+                        style="display:inline; color : white; font-size: 40px">
+                        notification_important</button>
+                    {% if post_list_false.count %}
+                    <span id="alarm_counter" title="Alarm about due date over">{{post_list_false.count}}</span>
+                    {% endif %}
+                </a>
+            
         </div>
     </div>
 
@@ -72,22 +67,26 @@
             {% endblock %}
             <!-- modal -->
             <div id="modal">
-                <div id="modal_content">
+                <div id="modal_content">                
                     <div id="modal_header">
-                        <a>[마감 기한이 지난 항목]</a>
-                        <input type="button" class="btn" id="modal_cancel_btn" onclick=close_pop() value="x">
+                        <a>[Due Date Over List]</a>
+                        <button class="mdc-icon-button material-icons" title="Close"
+                        style="display:inline; font-size: 20px; float:right;" id="modal_cancel_btn" onclick=close_pop()>
+                        clear</button>   
                     </div>
                     <div id="modal_table">
                         <div class="modal_row_header">
-                            <span class="modal_col1">제목</span><span class="modal_col2">마감 기한</span>
+                            <span class="modal_col1">Title</span><span class="modal_col2">Due date</span>
                         </div>
-                        {% for post in post_list_false %}
+                        
                         <div class="modal_row">
+                            {% for post in post_list_false %}
                             <li><span class="modal_col1">{{post.title}}</span>
                                 <span class="modal_col2">{{post.due_date|date:'Y-m-d'}}</span>
                             </li>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
+                        
                     </div>
                 </div>
             </div>

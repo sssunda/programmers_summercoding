@@ -38,7 +38,7 @@
         <div class="todo_title">{{post.title}}</div>
         <!-- 사용되는 버튼들 -->
         <div class="btn_group">
-            <button id="home_btn" class="mdc-icon-button material-icons" style="display:inline; font-size: 40px"
+            <button id="home_btn" class="mdc-icon-button material-icons" title="List" style="display:inline; font-size: 40px"
                 onclick=home_btn()>
                 format_list_bulleted</button>
             
@@ -46,16 +46,16 @@
             <button class="mdc-icon-button material-icons" style="display:inline; font-size: 40px;" disabled>
                 check_circle_outline</button>
             {% else %}
-            <button id="complete_btn" class="mdc-icon-button material-icons" style="display:inline; font-size: 40px;"
+            <button id="complete_btn" class="mdc-icon-button material-icons" title="Done" style="display:inline; font-size: 40px;"
                 onclick=complete_btn()>
                 check_circle_outline</button>
             {% endif %}
             
-            <button id="edit_btn" class="mdc-icon-button material-icons" style="display:inline;font-size: 40px"
+            <button id="edit_btn" class="mdc-icon-button material-icons" title="Edit post" style="display:inline;font-size: 40px"
                 onclick=edit_btn()>
                 edit</button>
 
-            <button id="delete_btn" class="mdc-icon-button material-icons" style="display:inline;font-size: 40px"
+            <button id="delete_btn" class="mdc-icon-button material-icons" title="Delete post" style="display:inline;font-size: 40px"
                 onclick=delete_btn()>
                 delete_forever</button>
 
@@ -64,6 +64,8 @@
 
     <!-- 선택된 todo 항목 상세 내용 -->
     <div class="todo_body">
+            <div class="todo_row">
+        
         <div class="todo_col1">Due date</div>
         <div class="todo_col2">
             {% if post.due_chk %}
@@ -72,6 +74,8 @@
             -
             {% endif %}
         </div>
+            </div>
+            <div class="todo_row"> 
         <div class="todo_col1">Status</div>
         <div class="todo_col2">
             {% if post.complete_chk %}
@@ -80,8 +84,7 @@
             진행중
             {% endif %}
         </div>
-
-
+        </div>
     </div>
     <div id="todo_content_title">Notes</div>
     <div id="todo_content">{{post.text}}</div>

@@ -2,22 +2,22 @@
 {% load static %}
 
 {% block script %}
-    <!-- static에 있는 css -->
-    <link rel="stylesheet" href="{% static 'css/post_list.css' %}">
-    
+<!-- static에 있는 css -->
+<link rel="stylesheet" href="{% static 'css/post_list.css' %}">
+
 <script>
     // 우선 순위 리스트 움직일 수 있게끔 설정
     function sort() {
         $(function () {
-            $("#sortable").sortable();
-            $("#sortable").disableSelection();
+            $(".sortable").sortable();
+            $(".sortable").disableSelection();
         });
     }
 
     // 변경된 우선 순위 적용
     function rank_change() {
         // 배열 생성
-        var orderlist = $("#sortable").sortable("toArray");
+        var orderlist = $(".sortable").sortable("toArray");
 
         // 배열을 POST 로 넘김
         $.ajax({
@@ -43,23 +43,24 @@
     }
 
     // 우선 순위 변경 버튼 눌렀을 때,
-    function rank_btn(){
-        if ($("#rank_btn").val() == "우선 순위 변경") {
-            sort()
-            $("#rank_btn").attr('class', 'btn btn-danger')
-            $("#rank_btn").val('저장')
-            $("#add_post_btn").hide()
-            $("#rank_help").show()
-            $(".btn-success").attr('disabled', true)
-        }
-        else {
-            rank_change()
-            $("#rank_btn").attr('class', 'btn')
-            $("#rank_btn").val('우선 순위 변경')
-            $("#add_post_btn").show()
-            $("#rank_help").hide()
-            $(".btn-success").attr('disabled', false)
-        }
+    function rank_btn() {
+        sort()
+        // $("#rank_btn").hide()
+        
+        document.getElementById('rank_btn').style.visibility = 'hidden';
+        $("#rank_save_btn").show()
+        $("#add_post_btn").hide()
+        $("#rank_help").show()
+        $(".todo_list_body button").attr('disabled',true)        
+    }
+    function rank_save_btn() {
+        rank_change()
+        document.getElementById('rank_btn').style.visibility = 'visible';
+        
+        $("#rank_save_btn").hide()
+        $("#add_post_btn").show()
+        $("#rank_help").hide()
+        $(".todo_list_body button").attr('disabled',false)
     }
 
     // 항목 완료 체크버튼 눌렀을 때,
@@ -81,54 +82,73 @@
 
 <!-- 사용되는 버튼들 -->
 <div class="btn_group">
-    <input type="button" class="btn" id="rank_btn" onclick=rank_btn() value="우선 순위 변경" />
-    <input type="button" class="btn" id="add_post_btn" onclick=add_post_btn() value="+" />
-    <span id="rank_help" style="display:none">* 리스트를 드래그 하여 우선 순위를 변경하여 주십시오.</span>
+    <button id="rank_save_btn" class="mdc-icon-button material-icons" style="font-size: 40px;display:none;"
+        onclick=rank_save_btn()>
+        save
+    </button>
+    <a id="rank_help" style="font-weight: bold;"> * 리스트를 드래그 하여 우선 순위를 변경하여 주십시오.</a>
+    <button id="add_post_btn" title="Add post" class="mdc-icon-button material-icons" onclick=add_post_btn()>
+        add_circle
+    </button>
 </div>
-<!-- todo 항목 리스트의 헤더 -->
-<ul id='todo_list_header'>
-    <li><span class="col_rank">우선순위</span><span class="col_title">제목</span><span class="col_due_date">마감기한</span><span
-            class="col_complete">완료</span></li>
-</ul>
+
+
 <!-- todo 항목 list -->
-<div id="todo_list">
+<div class="todo_list">
+    <!-- todo 항목 리스트의 헤더 -->
+    <div class="todo_list_header">
+        <span class="col_rank">Rank
+            <button id="rank_btn" class="mdc-icon-button material-icons" title="Change Rank" onclick=rank_btn()>
+                format_line_spacing
+            </button>
+        </span>
+        <span class="col_title">Title</span>
+        <span class="col_due_date">Due date</span>
+        <span class="col_complete">Status</span>
+    </div>
     <!-- 완료되지 않은 list -->
-    <ul id="sortable">
-        {% for post in post_list %}
-        <li id={{forloop.counter}}>
-            <span class="col_rank">{{post.rank |floatformat:"0"}}</span>
-            <span class="col_title"><a href="{% url 'board:post_detail' post.id %}">{{post.title}}</a></span>
-            <span class="col_due_date">
-                {% if post.due_chk %}
-                {{post.due_date|date:'Y-m-d'}}
-                {% else %}
-                -
-                {% endif %}
-            </span>
-            <span class="col_complete   ">
-
-                <input type="button" class="btn btn-success" onclick=complete_btn("{{post.id}}") value="확인" />
-            </span>
-        </li>
-        {% endfor %}
-    </ul>
-
-    <!-- 완료된 list -->
-    <ul id="fixed">
-        {% for post in post_list_complete %}
-        <li>
-            <span class="col_rank">-</span>
-            <span class="col_title"><a href="{% url 'board:post_detail' post.id %}">{{post.title}}</a></span>
-            <span class="col_due_date">
-                {% if post.due_chk %}
-                {{post.due_date|date:'Y-m-d'}}
-                {% else %}
-                -
-                {% endif %}
-            </span>
-            <span class="col_complete">O</span>
-        </li>
-        {% endfor %}
-    </ul>
+    <div class="todo_list_body">
+        <ul class="sortable">
+            {% for post in post_list %}
+            <li id={{forloop.counter}}>
+                <span class="col_rank">{{post.rank |floatformat:"0"}}</span>
+                <span class="col_title"><a href="{% url 'board:post_detail' post.id %}">{{post.title}}</a></span>
+                <span class="col_due_date">
+                    {% if post.due_chk %}
+                    {{post.due_date|date:'Y-m-d'}}
+                    {% else %}
+                    -
+                    {% endif %}
+                </span>
+                <span class="col_complete">
+                        <button class="mdc-icon-button material-icons" title="Done" style="font-size: 25px" onclick=complete_btn("{{post.id}}")>
+                                radio_button_unchecked
+                            </button>
+                </span>
+            </li>
+            {% endfor %}
+        </ul>
+        <!-- 완료된 list -->
+        <ul class="fixed">
+            {% for post in post_list_complete %}
+            <li>
+                <span class="col_rank">-</span>
+                <span class="col_title"><a href="{% url 'board:post_detail' post.id %}">{{post.title}}</a></span>
+                <span class="col_due_date">
+                    {% if post.due_chk %}
+                    {{post.due_date|date:'Y-m-d'}}
+                    {% else %}
+                    -
+                    {% endif %}
+                </span>
+                <span class="col_complete">
+                    <button class="mdc-icon-button material-icons" style="font-size: 25px" disabled>
+                        check_circle_outline
+                    </button>
+                </span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 {% endblock %}

@@ -4,10 +4,11 @@
 {% block script %}
 <!-- static에 있는 css -->
 <link rel="stylesheet" href="{% static 'css/post_detail.css' %}">
+
 <script>
     $(document).ready(function () {
         var param = document.location.href.split("/");
-        if (param[3] == "new") {
+        if (param[param.length - 2] == "new") {
             $("#todo_row_complete").hide();
         } else {
             $("#todo_row_complete").show();
@@ -45,11 +46,13 @@
 
     // 뒤로가기 버튼
     function cancel_btn() {
+        $("#cancel_btn").bind('submit', "return false;")
         var param = document.location.href.split("/");
-        if (param[3] == "new") {
+        if (param[param.length - 2] == "new") {
             location.href = "{% url 'board:post_list' %}"
         } else {
-            var url = "{% url 'board:post_detail' 'id' %}".replace('id', param[3])
+            id = param[param.length - 3]
+            var url = "{% url 'board:post_detail' 'id' %}".replace('id', id)
             location.href = url
         }
     }
@@ -62,39 +65,43 @@
 {% endblock %}
 
 {% block content %}
-<!-- form 항목 -->
-<div class="todo">
-    <form method="POST" class="post-form">{% csrf_token %}
-        <div class="btn_group">
-            <input type="button" id="cancel_btn" class="btn" value="취소" />
-            <input type="submit" id="save_btn" class="btn btn-danger" onclick="return is_valid_save()" value="저장" />
-        </div>
-        <div id="todo_table">
 
-            <div class="todo_cell col1">제목</div>
-            <div class="todo_cell col2">{{form.title}}</div>
+<form method="POST" class="post-form">{% csrf_token %}
+    <div class="todo">
+        <div class="todo_header">
+            <div class="todo_title">{{form.title}}</div>
+            <!-- 사용되는 버튼들 -->
+            <div class="btn_group">
+                <button type="button" id="cancel_btn" class="mdc-icon-button material-icons" title="Cancel"
+                    style="display:inline;font-size: 40px;">
+                    cancel</button>
 
-
-            <div id="todo_content" class="todo_cell col1">내용</div>
-            <div id="todo_content" class="todo_cell col2">{{form.text}}</div>
-
-
-            <!-- 유효성 체크 후, 에러발생시 메세지 보여줌 -->
-            {{ form.non_field_errors }}
-
-            <div class="todo_cell col1">마감 기한</div>
-            <div class="todo_cell col2">{{form.due_chk}}{{form.due_date}}</div>
-
-            <!-- 항목 추가시에는 완료 여부 보이지 않도록 한다. -->
-
-            <div id="todo_row_complete" class="todo_row" style="display: none">
-                <div class="todo_cell col1">완료 여부</div>
-                <div class="todo_cell col2">{{form.complete_chk}}</div>
+                <button type="submit" id="save_btn" class="mdc-icon-button material-icons" title="Save post"
+                    style="display:inline; font-size: 40px;" onclick="return is_valid_save()">
+                    save_outline</button>
             </div>
-
         </div>
 
+        <!-- 선택된 todo 항목 상세 내용 -->
+        <div class="todo_body">
 
-    </form>
-</div>
+            <div class="todo_row">
+                <!-- 유효성 체크 후, 에러발생시 메세지 보여줌 -->
+                {{ form.non_field_errors }}
+                <div class="todo_col1">Due date</div>
+                <div class="todo_col2">
+                    {{form.due_chk}}{{form.due_date}}
+                </div>
+            </div>
+            <div class="todo_row">
+                <div class="todo_col1">Status</div>
+                <div class="todo_col2">{{form.complete_chk}} <a style="font-weight: normal;">완료시 체크해주세요.</a></div>
+            </div>
+        </div>
+        <div id="todo_row">
+            <div id="todo_content_title">Notes</div>
+            <div id="todo_content">{{form.text}}</div>
+        </div>
+    </div>
+</form>
 {% endblock %}
