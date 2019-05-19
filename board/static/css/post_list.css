@@ -6,6 +6,7 @@ ul{
 li{
     list-style: none;
 }
+
 .btn_group{
     display: inline-block;
     width:100%;
@@ -31,7 +32,9 @@ li{
 .todo_list_body{
     height:650px;
     overflow:auto;
-
+}
+.todo_list_body a{
+    text-decoration: none;
 }
 span{
     height:50px;
