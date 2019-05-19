@@ -44,13 +44,18 @@ def add_post(request):
     # 마감기한 지난 리스트
     dt = datetime.datetime.now().strftime("%Y-%m-%d")
     post_list_false=Post.objects.filter(complete_chk=False, due_date__lt=dt).order_by('due_date')
-    cnt = len(Post.objects.exclude(rank='end'))+1
+
     form = PostForm()
+    cnt = len(Post.objects.exclude(rank='end'))+1
+    
     if request.method=="POST":
         form=PostForm(request.POST)
         if form.is_valid():
             post=form.save(commit=False)
-            post.rank = str(cnt)
+            if post.complete_chk :
+                post.rank='end'
+            else :
+                post.rank = str(cnt)
 
             # DB 저장    
             post.save()
