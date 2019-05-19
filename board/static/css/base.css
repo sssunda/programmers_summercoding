@@ -115,7 +115,6 @@ body{
     display: table;
     width: 100%;
     height: 100px;
-    
 }
 
 .modal_row_header {
@@ -146,6 +145,7 @@ body{
     
 }
 .modal_row li{
+    list-style: none;
     padding-top:10px;
     padding-bottom:10px;
 }
