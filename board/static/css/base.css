@@ -1,5 +1,7 @@
 body{
+    margin : 0;
     font-family: 'Nanum Gothic', sans-serif;
+    
 }
 .page_header {
     width: 100%;

@@ -74,7 +74,10 @@ def edit_post(request, pk):
         form=PostForm(request.POST, instance = post)
         if form.is_valid():
             post=form.save(commit=False)           
-                        
+            if not(post.complete_chk):
+                cnt = len(Post.objects.exclude(rank='end'))+1  
+                post.rank=cnt
+            
             # DB저장
             post.save()
 
