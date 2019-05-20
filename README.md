@@ -23,9 +23,9 @@ $ git clone http://github.com/sssunda/programmers_summercoding
 
 ```bash
 # 초기화
-bash ./programmers_summercoding/init_app.sh
+bash ./programmers_summercoding/bin/init_app.sh
 # 시작
-bash ./programmers_summercoding/run_app.sh
+bash ./programmers_summercoding/bin/run_app.sh
 ```
 
 #### [참고]
