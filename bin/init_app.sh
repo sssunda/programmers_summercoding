@@ -1,4 +1,6 @@
 #!/bin/bash   
+echo "[INFO] Start initialize"
+
 set 
 
 # Move to parent directory
@@ -14,3 +16,4 @@ pip install django~=2.0
 
 python manage.py migrate
 
+echo "[INFO] App initialize success"
