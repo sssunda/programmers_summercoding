@@ -1,6 +1,11 @@
 #!/bin/bash   
 set 
 
+# Move to parent directory
+SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+cd $SCRIPT_DIR
+cd ..
+
 virtualenv --python=python3.6 myvenv
 
 source myvenv/bin/activate
