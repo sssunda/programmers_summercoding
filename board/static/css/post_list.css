@@ -30,7 +30,7 @@ li{
     font-weight: bold;
 }
 .todo_list_body{
-    height:570px;
+    height:576px;
     overflow:auto;
 }
 .todo_list_body a{
