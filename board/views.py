@@ -71,10 +71,12 @@ def edit_post(request, pk):
 
     post = get_object_or_404(Post,pk=pk)
     if request.method=="POST":
+        pre_compelete_chk = post.complete_chk
         form=PostForm(request.POST, instance = post)
         if form.is_valid():
-            post=form.save(commit=False)           
-            if not(post.complete_chk):
+            post=form.save(commit=False)       
+            # 기존 완료 처리와 다를 경우에만 순위 변동하도록
+            if not(post.complete_chk)and not(pre_compelete_chk==post.complete_chk):
                 cnt = len(Post.objects.exclude(rank='end'))+1  
                 post.rank=cnt
             
